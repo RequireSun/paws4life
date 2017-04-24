@@ -11,6 +11,26 @@ class orders extends MY_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this -> load -> model("orders_model");
+		$this -> load -> model("users_model");
+	}
+	/**
+	 * 未登录 -1900
+	 * 账户不存在 -1901
+	 * @return int
+	 */
+	private function check_login_power () {
+		$id = $this -> get_cookie('id');
+		if (!isset($id) || empty($id) || '' === $id) {
+			return -1900;
+		}
+
+		$data = $this -> users_model -> get_detail($id);
+
+		if (empty($data)) {
+			return -1901;
+		} else {
+			return $data['power'];
+		}
 	}
 
 	public function get_list () {
@@ -37,8 +57,21 @@ class orders extends MY_Controller {
 	}
 
 	public function adopt () {
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
 		$id    = $this->get_post_xss('id');
-		$buyer = $this->get_post_xss('buyer');
+		$buyer = $this->get_cookie('buyer');
 
 		if (isset($id) && is_numeric($id) && isset($buyer) && is_numeric($buyer)) {
 			$flag = $this->orders_model->update($id, $buyer);

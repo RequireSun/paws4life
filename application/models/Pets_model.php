@@ -11,6 +11,23 @@ class Pets_model extends CI_Model {
 		$this->load->database();
 	}
 
+	public function check_is_owner ($uid, $id) {
+		if (isset($uid) && '' !== $uid && isset($id) && '' !== $id) {
+			$this->db->select('orders.id');
+			$this->db->from('orders');
+			$this->db->join('users', 'users.id = orders.users_id');
+			$this->db->join('pets', 'pets.id = orders.pets_id');
+			$this->db->where(array(
+				'users.id' => $uid,
+				'pets.id' => $id,
+			));
+			$query = $this->db->get();
+			return array('result' => len($query -> result_array()) > 0, 'query' => $this->db->last_query());
+		} else {
+			return array('result' => false);
+		}
+	}
+
 	public function get_list ($page, $where, $like) {
 		if (isset($where) && !empty($where)) {
 			$where = array_filter($where);

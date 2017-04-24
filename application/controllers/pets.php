@@ -12,6 +12,26 @@ class pets extends MY_Controller {
 		parent::__construct();
 		$this -> load -> model("pets_model");
 		$this -> load -> model("orders_model");
+		$this -> load -> model("users_model");
+	}
+	/**
+	 * 未登录 -1900
+	 * 账户不存在 -1901
+	 * @return int
+	 */
+	private function check_login_power () {
+		$id = $this -> get_cookie('id');
+		if (!isset($id) || empty($id) || '' === $id) {
+			return -1900;
+		}
+
+		$data = $this -> users_model -> get_detail($id);
+
+		if (empty($data)) {
+			return -1901;
+		} else {
+			return $data['power'];
+		}
 	}
 
 	public function get_list () {
@@ -35,7 +55,20 @@ class pets extends MY_Controller {
 	}
 	
 	public function add () {
-		$publisher   = $this -> get_post_xss('publisher');
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+		$publisher   = $this -> get_cookie('uid');
 
 		if ('' === $publisher) {
 			$this -> error(array(), -20);
@@ -49,7 +82,6 @@ class pets extends MY_Controller {
 		$gender      = $this -> get_post_xss("gender");
 		$birthday    = $this -> get_post_xss("birthday");
 
-		//TODO 登录态与权限
 		$flag = $this -> pets_model -> insert($name, $description, $image, $type, $gender, $birthday);
 
 		if (0 >= $flag) {
@@ -65,10 +97,31 @@ class pets extends MY_Controller {
 	 * -1066 是找不到想要修改的行
 	 */
 	public function modify () {
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
 		$id       = $this -> get_post_xss("id");
 
 		if ('' === $id) {
 			$this -> error(array(), -20);
+			return ;
+		}
+
+		$check_res = $this -> pets_model -> check_is_owner($this -> get_cookie('uid'), $id);
+		if (!$check_res['result'] && 3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
 			return ;
 		}
 
@@ -86,30 +139,42 @@ class pets extends MY_Controller {
 			"gender" => $gender,
 			"birthday" => $birthday
 		);
-//		if ('' !== $name) {
-//			$data['$name'] = $name;
-//		}
-//		if ('' !== $description) {
-//			$data['$description'] = $description;
-//		}
-//		if ('' !== $image) {
-//			$data['image'] = $image;
-//		}
 
-		//TODO 登录态与权限
 		$flag = $this -> pets_model -> update($id, $data);
 
 		TRUE === $flag ? $this -> success(array()) : $this -> error(array(), $flag);
 	}
 
 	public function delete () {
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+
 		$id = $this -> get_post_xss("id");
 
 		if ('' === $id) {
 			$this -> error(array(), -20);
 			return ;
 		}
-		//TODO 登录态与权限
+
+		$check_res = $this -> pets_model -> check_is_owner($this -> get_cookie('uid'), $id);
+		if (!$check_res['result'] && 3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
+			return ;
+		}
+
 		$flag1 = $this -> pets_model -> delete($id);
 		$flag2 = $this -> orders_model -> delete("", $id);
 

@@ -13,8 +13,53 @@ class Users extends MY_Controller {
 		$this -> load -> model("users_model");
 	}
 
+	/**
+	 * 未登录 -1900
+	 * 账户不存在 -1901
+	 * @return int
+	 */
+	private function check_login_power () {
+		$id = $this -> get_cookie('id');
+		if (!isset($id) || empty($id) || '' === $id) {
+			return -1900;
+		}
+
+		$data = $this -> users_model -> get_detail($id);
+
+		if (empty($data)) {
+			return -1901;
+		} else {
+			return $data['power'];
+		}
+	}
+
 	public function get_detail () {
-		$id = $this -> get_post_xss("id");
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+		// 过滤掉了没有登录态的
+		$id       = $this -> get_post_xss("id");
+		// 过滤掉指定 id 获取但不是管理员的
+		if ((isset($id) && !empty($id)) && 3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
+			return ;
+		}
+		// 没有提供 id 的情况下就是获取自己的
+		if (!isset($id) || empty($id)) {
+			$id = $this -> get_cookie('uid');
+		}
 
 		if ('' === $id) {
 			$this -> error(array(), -20);
@@ -31,6 +76,25 @@ class Users extends MY_Controller {
 	}
 
 	public function get_list () {
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+		if (3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
+			return ;
+		}
 		$pageNumber = $this->get_post_xss('pageNumber');
 		$pageSize   = $this->get_post_xss('pageSize');
 
@@ -47,7 +111,7 @@ class Users extends MY_Controller {
 
 		$this -> success($data);
 	}
-	//TODO
+
 	public function login () {
 		$account  = $this -> get_post_xss("account");
 		$password = $this -> get_post_xss("password");
@@ -57,8 +121,13 @@ class Users extends MY_Controller {
 		if (empty($data)) {
 			$this -> error($data, -1);
 		} else {
+			$this -> set_cookie("uid", $data['id'], 7200);
 			$this -> success($data);
 		}
+	}
+	public function logout () {
+		$this -> delete_cookie("uid");
+		$this -> success(array());
 	}
 	/**
 	 * -1062 是已存在用户名
@@ -86,6 +155,25 @@ class Users extends MY_Controller {
 	 * 3 管理员 (宠物: 看 / 删; 用户: 增 / 删 / 改 / 查)
 	 */
 	public function add () {
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+		if (3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
+			return ;
+		}
 		$account     = $this -> get_post_xss("account");
 		$password    = $this -> get_post_xss("password");
 
@@ -103,7 +191,7 @@ class Users extends MY_Controller {
 		} else if (0 >= $power) {
 			$power = 1;
 		}
-		//TODO 登录态与权限
+
 		$flag = $this -> users_model -> insert($account, $password, $name, $description, "", "", "", "", "", "", $power);
 
 		TRUE === $flag ? $this -> success(array()) : $this -> error(array(), $flag);
@@ -112,11 +200,31 @@ class Users extends MY_Controller {
 	 * -1066 是找不到想要修改的行
 	 */
 	public function modify () {
-		$id       = $this -> get_post_xss("id");
-
-		if ('' === $id) {
-			$this -> error(array(), -20);
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
 			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+		// 过滤掉了没有登录态的
+		$id       = $this -> get_post_xss("id");
+		// 过滤掉指定 id 修改但不是管理员的
+		if ((isset($id) && !empty($id)) && 3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
+			return ;
+		}
+		// 没有提供 id 的情况下就是改自己的
+		if (!isset($id) || empty($id)) {
+			$id = $this -> get_cookie('uid');
 		}
 
 		$password    = $this -> get_post_xss("password");
@@ -139,16 +247,10 @@ class Users extends MY_Controller {
 		if ('' !== $password) {
 			$data['password'] = $password;
 		}
-//		if ('' !== $name) {
-//			$data['$name'] = $name;
-//		}
-//		if ('' !== $description) {
-//			$data['$description'] = $description;
-//		}
 		if ('' !== $power) {
 			$data['$power'] = $power;
 		}
-		
+
 		$data['name'] = $name;
 		$data['description'] = $description;
 		$data['image'] = $image;
@@ -158,20 +260,38 @@ class Users extends MY_Controller {
 		$data['address'] = $address;
 		$data['postcode'] = $postcode;
 
-		//TODO 登录态与权限
 		$flag = $this -> users_model -> update($id, $data);
 
 		TRUE === $flag ? $this -> success(array()) : $this -> error(array(), $flag);
 	}
 
 	public function delete () {
+		$login = $this -> check_login_power();
+		if (-1900 === $login) {
+			$this -> error(array(
+				"msg" => "no login",
+			), -1900);
+			return ;
+		}
+		if (-1901 === $login) {
+			$this -> error(array(
+				"msg" => "no account",
+			), -1901);
+			return ;
+		}
+		if (3 > $login) {
+			$this -> error(array(
+				"msg" => "no power",
+			), -19);
+			return ;
+		}
 		$id = $this -> get_post_xss("id");
 
 		if ('' === $id) {
 			$this -> error(array(), -20);
 			return ;
 		}
-		//TODO 登录态与权限
+
 		$flag = $this -> users_model -> delete($id);
 
 		TRUE === $flag ? $this -> success(array()) : $this -> error(array(), $flag);
