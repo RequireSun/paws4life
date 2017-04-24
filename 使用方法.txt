@@ -1,0 +1,23 @@
+1. 安装 mysql & php 运行环境
+2. 在 mysql 中运行 paws4life.sql 文件, 导入数据库与测试数据
+3. 拷贝项目到运行环境指定的目录
+4. 通过浏览器访问你们给这个项目配的路径下的 info.php 文件, 如果显示出 php 信息, 证明配置正确
+5. 修改项目下的 application/config/database.php 里面的数据库连接配置
+6. 接口使用方法: 
+   域名 + /index.php + 接口 + ?参数key=参数value&参数2key=参数2value
+7. 接口列表(具体参数请自行查阅代码):
+   /users/get_detail: 获取用户详情
+   /users/get_list  : 获取用户列表
+   /users/login     : 登录(校验)
+   /users/register  : 注册(普通用户自行注册)
+   /users/add       : 添加新用户(管理员添加普通用户和商户用户)
+   /users/modify    : 修改账户信息
+   /users/delete    : 删除帐号(仅限管理员)
+
+   /pets/get_list	: 获取宠物列表(有查询功能, 具体使用看参数)
+   /pets/add		: 添加宠物
+   /pets/modify		：修改宠物
+   /pets/delete		: 删除宠物
+
+   /orders/get_list	: 获取订单列表(有查询功能)
+   /orders/adopt	: 领养
