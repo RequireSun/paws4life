@@ -45,9 +45,12 @@ class pets extends MY_Controller {
 		$name        = $this -> get_post_xss("name");
 		$description = $this -> get_post_xss("description");
 		$image       = $this -> get_post_xss("image");
+		$type        = $this -> get_post_xss("type");
+		$gender      = $this -> get_post_xss("gender");
+		$birthday    = $this -> get_post_xss("birthday");
 
 		//TODO 登录态与权限
-		$flag = $this -> pets_model -> insert($name, $description, $image);
+		$flag = $this -> pets_model -> insert($name, $description, $image, $type, $gender, $birthday);
 
 		if (0 >= $flag) {
 			$this -> error(array(), $flag);
@@ -72,16 +75,26 @@ class pets extends MY_Controller {
 		$name        = $this -> get_post_xss("name");
 		$description = $this -> get_post_xss("description");
 		$image       = $this -> get_post_xss("image");
-		$data = array();
-		if ('' !== $name) {
-			$data['$name'] = $name;
-		}
-		if ('' !== $description) {
-			$data['$description'] = $description;
-		}
-		if ('' !== $image) {
-			$data['image'] = $image;
-		}
+		$type        = $this -> get_post_xss("type");
+		$gender      = $this -> get_post_xss("gender");
+		$birthday    = $this -> get_post_xss("birthday");
+		$data = array(
+			"name" => $name,
+			"description" => $description,
+			"image" => $image,
+			"type" => $type,
+			"gender" => $gender,
+			"birthday" => $birthday
+		);
+//		if ('' !== $name) {
+//			$data['$name'] = $name;
+//		}
+//		if ('' !== $description) {
+//			$data['$description'] = $description;
+//		}
+//		if ('' !== $image) {
+//			$data['image'] = $image;
+//		}
 
 		//TODO 登录态与权限
 		$flag = $this -> pets_model -> update($id, $data);

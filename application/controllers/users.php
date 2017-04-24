@@ -104,7 +104,7 @@ class Users extends MY_Controller {
 			$power = 1;
 		}
 		//TODO 登录态与权限
-		$flag = $this -> users_model -> insert($account, $password, $name, $description, $power);
+		$flag = $this -> users_model -> insert($account, $password, $name, $description, "", "", "", "", "", "", $power);
 
 		TRUE === $flag ? $this -> success(array()) : $this -> error(array(), $flag);
 	}
@@ -122,6 +122,12 @@ class Users extends MY_Controller {
 		$password    = $this -> get_post_xss("password");
 		$name        = $this -> get_post_xss("name");
 		$description = $this -> get_post_xss("description");
+		$image       = $this -> get_post_xss("image");
+		$phone       = $this -> get_post_xss("phone");
+		$country     = $this -> get_post_xss("country");
+		$user_id     = $this -> get_post_xss("user_id");
+		$address     = $this -> get_post_xss("address");
+		$postcode    = $this -> get_post_xss("postcode");
 		$power       = $this -> get_post_xss("power");
 		// 最高也只能加商户, 更高的改 db 添加
 		if ('' !== $power && 3 <= $power) {
@@ -133,15 +139,24 @@ class Users extends MY_Controller {
 		if ('' !== $password) {
 			$data['password'] = $password;
 		}
-		if ('' !== $name) {
-			$data['$name'] = $name;
-		}
-		if ('' !== $description) {
-			$data['$description'] = $description;
-		}
+//		if ('' !== $name) {
+//			$data['$name'] = $name;
+//		}
+//		if ('' !== $description) {
+//			$data['$description'] = $description;
+//		}
 		if ('' !== $power) {
 			$data['$power'] = $power;
 		}
+		
+		$data['name'] = $name;
+		$data['description'] = $description;
+		$data['image'] = $image;
+		$data['phone'] = $phone;
+		$data['country'] = $country;
+		$data['user_id'] = $user_id;
+		$data['address'] = $address;
+		$data['postcode'] = $postcode;
 
 		//TODO 登录态与权限
 		$flag = $this -> users_model -> update($id, $data);
