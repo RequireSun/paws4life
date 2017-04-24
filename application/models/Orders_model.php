@@ -126,9 +126,14 @@ class Orders_model extends CI_Model {
 		$this->db->select(
 			'orders.id AS id, orders.create_time AS create_time, ' .
 			'pets.id AS pets_id, pets.name AS pets_name, pets.description AS pets_description, ' .
-			'pets.image AS pets_image, pets.create_time AS pets_create_time, ' .
+			'pets.image AS pets_image, pets.type AS pets_type, pets.gender AS pets_gender, ' .
+			'pets.birthday AS pets_birthday, pets.create_time AS pets_create_time, ' .
 			'u.id AS publisher_id, u.name AS publisher_name, u.description AS publisher_description, ' .
-			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description '
+			'u.image AS publisher_image, u.phone AS publisher_phone, u.country AS publisher_country, ' .
+			'u.user_id AS publisher_user_id, u.address AS publisher_address, u.postcode AS publisher_postcode, ' .
+			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description, ' .
+			'b.image AS buyer_image, b.phone AS buyer_phone, b.country AS buyer_country, ' .
+			'b.user_id AS buyer_user_id, b.address AS buyer_address, b.postcode AS buyer_postcode '
 		);
 		$this->db->from('orders');
 		$this->db->join('pets', 'pets.id = orders.pets_id', 'left');
@@ -169,9 +174,20 @@ class Orders_model extends CI_Model {
 				'pets.name AS pets_name, ' .
 				'pets.description AS pets_description, ' .
 				'pets.image AS pets_image, ' .
+				'pets.type AS pets_type, ' .
+				'pets.gender AS pets_gender, ' .
+				'pets.birthday AS pets_birthday, ' .
+				'pets.create_time AS pets_create_time, ' .
 				'users.id AS users_id, ' .
 				'users.name AS users_name, ' .
-				'users.description AS users_description');
+				'users.description AS users_description, ' .
+				'u.image AS users_image, ' .
+				'u.phone AS users_phone, ' .
+				'u.country AS users_country, ' .
+				'u.user_id AS users_user_id, ' .
+				'u.address AS users_address, ' .
+				'u.postcode AS users_postcode '
+			);
 			$this -> db -> from('orders');
 			$this -> db -> join('users', 'users.id = orders.users_id');
 			$this -> db -> join('pets', 'pets.id = orders.pets_id');
@@ -193,9 +209,20 @@ class Orders_model extends CI_Model {
 				'pets.name AS pets_name, ' .
 				'pets.description AS pets_description, ' .
 				'pets.image AS pets_image, ' .
+				'pets.type AS pets_type, ' .
+				'pets.gender AS pets_gender, ' .
+				'pets.birthday AS pets_birthday, ' .
+				'pets.create_time AS pets_create_time, ' .
 				'users.id AS users_id, ' .
 				'users.name AS users_name, ' .
-				'users.description AS users_description');
+				'users.description AS users_description, ' .
+				'u.image AS users_image, ' .
+				'u.phone AS users_phone, ' .
+				'u.country AS users_country, ' .
+				'u.user_id AS users_user_id, ' .
+				'u.address AS users_address, ' .
+				'u.postcode AS users_postcode '
+			);
 			$this -> db -> from('orders');
 			$this -> db -> join('users', 'users.id = orders.users_id');
 			$this -> db -> join('pets', 'pets.id = orders.pets_id');

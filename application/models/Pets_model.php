@@ -51,10 +51,16 @@ class Pets_model extends CI_Model {
 
 		$this->db->select(
 			'pets.id AS id, pets.name AS name, pets.description AS description, ' .
-			'pets.image AS image, pets.create_time AS create_time, ' .
+			'pets.image AS image, pets.type AS type, pets.gender AS gender, ' .
+			'pets.birthday AS birthday, pets.create_time AS create_time, ' .
 			'orders.id AS orders_id, orders.create_time AS orders_create_time, ' .
 			'u.id AS publisher_id, u.name AS publisher_name, u.description AS publisher_description, ' .
-			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description '
+			'u.image AS publisher_image, u.phone AS publisher_phone, u.country AS publisher_country, ' .
+			'u.user_id AS publisher_user_id, u.address AS publisher_address, u.postcode AS publisher_postcode, ' .
+			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description, ' .
+			'b.image AS buyer_image, b.phone AS buyer_phone, b.country AS buyer_country, ' .
+			'b.user_id AS buyer_user_id, b.address AS buyer_address, b.postcode AS buyer_postcode '
+
 		);
 		$this->db->from('pets');
 		$this->db->join('orders', 'pets.id = orders.pets_id', 'left');
@@ -76,13 +82,16 @@ class Pets_model extends CI_Model {
 		return array('list' => $query -> result_array(), 'total' => $count, 'query' => $this->db->last_query());
 	}
 
-	public function insert ($name, $description = "", $image = "") {
+	public function insert ($name, $description = "", $image = "", $type = "", $gender = "", $birthday = "") {
 		if (isset($name) && '' !== $name) {
 			$data = array(
 				"name" => $name,
 				"description" => $description,
 				"image" => $image,
-				"create_time" => $now = date("Y-m-d H-i-s",time())
+				"type" => $type,
+				"gender" => $gender,
+				"birthday" => $birthday,
+				"create_time" => $now = date("Y-m-d H-i-s", time())
 			);
 
 			if (!$this -> db -> insert("pets", $data)) {
@@ -103,7 +112,7 @@ class Pets_model extends CI_Model {
 	public function update ($id, $changes) {
 		if (isset($id) && '' !== $id && is_array($changes) && !empty($changes)) {
 			$data = array();
-			$values = array("name", "description", "image");
+			$values = array("name", "description", "image", "type", "gender", "birthday");
 
 			foreach ($changes as $k => $v) {
 				if (in_array($k, $values) && '' !== $v) {
