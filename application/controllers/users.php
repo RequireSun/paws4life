@@ -19,7 +19,7 @@ class Users extends MY_Controller {
 	 * @return int
 	 */
 	private function check_login_power () {
-		$id = $this -> get_cookie('id');
+		$id = $this -> get_cookie_xss('uid');
 		if (!isset($id) || empty($id) || '' === $id) {
 			return -1900;
 		}
@@ -58,7 +58,7 @@ class Users extends MY_Controller {
 		}
 		// 没有提供 id 的情况下就是获取自己的
 		if (!isset($id) || empty($id)) {
-			$id = $this -> get_cookie('uid');
+			$id = $this -> get_cookie_xss('uid');
 		}
 
 		if ('' === $id) {
@@ -102,10 +102,13 @@ class Users extends MY_Controller {
 		$power      = $this->get_post_xss('power');
 
 		$search     = $this->get_post_xss('search');
+		$where      = $this->get_post_xss('where') ?: '';
+		$where      = json_decode($where, true);
+		$where      = array_merge($where, array('id' => $id, 'power' => $power));
 		
 		$data = $this->users_model->get_list(
 			array('pageNumber' => $pageNumber, 'pageSize' => $pageSize),
-			array('id' => $id, 'power' => $power),
+			$where,
 			$search
 		);
 
@@ -121,7 +124,7 @@ class Users extends MY_Controller {
 		if (empty($data)) {
 			$this -> error($data, -1);
 		} else {
-			$this -> set_cookie("uid", $data['id'], 7200);
+			set_cookie("uid", $data['id'], 7200);
 			$this -> success($data);
 		}
 	}
@@ -192,7 +195,12 @@ class Users extends MY_Controller {
 			$power = 1;
 		}
 
-		$flag = $this -> users_model -> insert($account, $password, $name, $description, "", "", "", "", "", "", $power);
+		$flag = $this -> users_model -> insert(
+			$account, $password, $name, $description,
+			"", "", "", "",
+			"", "", "", "",
+			$power
+		);
 
 		TRUE === $flag ? $this -> success(array()) : $this -> error(array(), $flag);
 	}
@@ -224,7 +232,7 @@ class Users extends MY_Controller {
 		}
 		// 没有提供 id 的情况下就是改自己的
 		if (!isset($id) || empty($id)) {
-			$id = $this -> get_cookie('uid');
+			$id = $this -> get_cookie_xss('uid');
 		}
 
 		$password    = $this -> get_post_xss("password");
@@ -233,8 +241,10 @@ class Users extends MY_Controller {
 		$image       = $this -> get_post_xss("image");
 		$phone       = $this -> get_post_xss("phone");
 		$country     = $this -> get_post_xss("country");
-		$user_id     = $this -> get_post_xss("user_id");
+		$city        = $this -> get_post_xss("city");
+		$road        = $this -> get_post_xss("road");
 		$address     = $this -> get_post_xss("address");
+		$user_id     = $this -> get_post_xss("user_id");
 		$postcode    = $this -> get_post_xss("postcode");
 		$power       = $this -> get_post_xss("power");
 		// 最高也只能加商户, 更高的改 db 添加
@@ -256,8 +266,10 @@ class Users extends MY_Controller {
 		$data['image'] = $image;
 		$data['phone'] = $phone;
 		$data['country'] = $country;
-		$data['user_id'] = $user_id;
+		$data['city'] = $city;
+		$data['road'] = $road;
 		$data['address'] = $address;
+		$data['user_id'] = $user_id;
 		$data['postcode'] = $postcode;
 
 		$flag = $this -> users_model -> update($id, $data);

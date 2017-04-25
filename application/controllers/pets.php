@@ -20,7 +20,7 @@ class pets extends MY_Controller {
 	 * @return int
 	 */
 	private function check_login_power () {
-		$id = $this -> get_cookie('id');
+		$id = $this -> get_cookie_xss('uid');
 		if (!isset($id) || empty($id) || '' === $id) {
 			return -1900;
 		}
@@ -45,9 +45,13 @@ class pets extends MY_Controller {
 		$adopted    = $this->get_post_xss('adopted');
 		$search     = $this->get_post_xss('search');
 
+		$where      = htmlspecialchars_decode(urldecode($this->get_post_xss('where') ?: ''));
+		$where      = json_decode($where, true);
+		$where      = array_merge($where, array('id' => $id, 'buyer' => $buyer, 'publisher' => $publisher, 'adopted' => $adopted));
+
 		$data = $this->pets_model->get_list(
 			array('pageNumber' => $pageNumber, 'pageSize' => $pageSize),
-			array('id' => $id, 'buyer' => $buyer, 'publisher' => $publisher, 'adopted' => $adopted),
+			$where,
 			$search
 		);
 
@@ -68,7 +72,7 @@ class pets extends MY_Controller {
 			), -1901);
 			return ;
 		}
-		$publisher   = $this -> get_cookie('uid');
+		$publisher   = $this -> get_cookie_xss('uid');
 
 		if ('' === $publisher) {
 			$this -> error(array(), -20);
@@ -117,7 +121,7 @@ class pets extends MY_Controller {
 			return ;
 		}
 
-		$check_res = $this -> pets_model -> check_is_owner($this -> get_cookie('uid'), $id);
+		$check_res = $this -> pets_model -> check_is_owner($this -> get_cookie_xss('uid'), $id);
 		if (!$check_res['result'] && 3 > $login) {
 			$this -> error(array(
 				"msg" => "no power",
@@ -167,7 +171,7 @@ class pets extends MY_Controller {
 			return ;
 		}
 
-		$check_res = $this -> pets_model -> check_is_owner($this -> get_cookie('uid'), $id);
+		$check_res = $this -> pets_model -> check_is_owner($this -> get_cookie_xss('uid'), $id);
 		if (!$check_res['result'] && 3 > $login) {
 			$this -> error(array(
 				"msg" => "no power",

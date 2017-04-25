@@ -14,7 +14,11 @@ class Users_model extends CI_Model {
 
 	public function get_detail ($id) {
 		if (isset($id) && '' !== $id) {
-			$this -> db -> select('id, name, description, image, phone, country, user_id, address, address, postcode, power');
+			$this -> db -> select(
+				'id, name, description, image, ' .
+				'phone, country, city, road, ' .
+				'address, user_id, postcode, power'
+			);
 			$query = $this -> db -> get_where('users', array('id' => $id, 'deleted' => 0), 1);
 			return $query -> row_array();
 		} else {
@@ -39,7 +43,11 @@ class Users_model extends CI_Model {
 
 		$count = $this->db->count_all_results('users', TRUE);
 
-		$this->db->select('id, name, description, image, phone, country, user_id, address, postcode, power');
+		$this->db->select(
+			'id, name, description, image, ' .
+			'phone, country, city, road, ' .
+			'address, user_id, postcode, power'
+		);
 
 		$where['deleted'] = 0;
 		$this->db->where($where);
@@ -69,8 +77,9 @@ class Users_model extends CI_Model {
 
 	public function insert (
 		$account, $password, $name = "", $description = "",
-		$image = "", $phone = "", $country = "", $user_id = "",
-		$address = "", $postcode = "", $power = 1) {
+		$image = "", $phone = "", $country = "", $city = "",
+		$road = "", $address = "", $user_id = "", $postcode = "", $power = 1
+	) {
 		if (isset($account) && isset($password) && '' !== $account && '' !== $password) {
 			$data = array(
 				"account" => $account,
@@ -80,8 +89,10 @@ class Users_model extends CI_Model {
 				"image" => $image,
 				"phone" => $phone,
 				"country" => $country,
-				"user_id" => $user_id,
+				"city" => $city,
+				"road" => $road,
 				"address" => $address,
+				"user_id" => $user_id,
 				"postcode" => $postcode,
 				"power" => $power,
 			);
@@ -106,8 +117,8 @@ class Users_model extends CI_Model {
 			$data = array();
 			$values = array(
 				"password", "name", "description", "image",
-				"phone", "country", "user_id", "address",
-				"postcode", "power"
+				"phone", "country", "city", "road", "address",
+				"user_id", "postcode", "power"
 			);
 
 			foreach ($changes as $k => $v) {

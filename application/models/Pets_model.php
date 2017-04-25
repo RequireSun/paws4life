@@ -42,12 +42,15 @@ class Pets_model extends CI_Model {
 		if (isset($where) && !empty($where)) {
 			if (isset($where['id']) && '' !== $where['id']) {
 				$w['pets.id'] = $where['id'];
+				unset($where['id']);
 			}
 			if (isset($where['buyer']) && '' !== $where['buyer']) {
 				$w['b.id'] = $where['buyer'];
+				unset($where['buyer']);
 			}
 			if (isset($where['publisher']) && '' !== $where['publisher']) {
 				$w['u.id'] = $where['publisher'];
+				unset($where['publisher']);
 			}
 			if (isset($where['adopted'])) {
 				if (1 == $where['adopted']) {
@@ -55,7 +58,9 @@ class Pets_model extends CI_Model {
 				} else if (0 == $where['adopted']) {
 					$w['orders.buyers_id'] = NULL;
 				}
+				unset($where['adopted']);
 			}
+			$w = array_merge($w, $where);
 		}
 		$this->db->where($w);
 

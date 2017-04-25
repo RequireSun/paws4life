@@ -19,7 +19,7 @@ class orders extends MY_Controller {
 	 * @return int
 	 */
 	private function check_login_power () {
-		$id = $this -> get_cookie('id');
+		$id = $this -> get_cookie_xss('uid');
 		if (!isset($id) || empty($id) || '' === $id) {
 			return -1900;
 		}
@@ -47,9 +47,13 @@ class orders extends MY_Controller {
 		$searchPublisher = $this->get_post_xss('searchPublisher');
 		$searchBuyer     = $this->get_post_xss('searchBuyer');
 
+		$where = $this->get_post_xss('where') ?: '';
+		$where = json_decode($where, true);
+		$where = array_merge($where, array('id' => $id, 'pet' => $pet, 'buyer' => $buyer, 'publisher' => $publisher, 'adopted' => $adopted));
+
 		$data = $this->orders_model->get_list(
 			array('pageNumber' => $pageNumber, 'pageSize' => $pageSize),
-			array('id' => $id, 'pet' => $pet, 'buyer' => $buyer, 'publisher' => $publisher, 'adopted' => $adopted),
+			$where,
 			array('pet' => $searchPet, 'publisher' => $searchPublisher, 'buyer' => $searchBuyer)
 		);
 
@@ -71,7 +75,7 @@ class orders extends MY_Controller {
 			return ;
 		}
 		$id    = $this->get_post_xss('id');
-		$buyer = $this->get_cookie('buyer');
+		$buyer = $this->get_cookie_xss('uid');
 
 		if (isset($id) && is_numeric($id) && isset($buyer) && is_numeric($buyer)) {
 			$flag = $this->orders_model->update($id, $buyer);

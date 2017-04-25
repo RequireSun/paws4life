@@ -13,6 +13,9 @@ class MY_Controller extends CI_Controller {
 		$this ->load ->helper('cookie');
 		$this ->load ->helper('common');
 	}
+	protected function get_cookie_xss($k) {
+		return get_cookie($k) ? (removeXSS(get_cookie($k))) : "";
+	}
 	/**
 	 * 从 GET: query / POST: body 中取值
 	 * @param string $k 表单项名称

@@ -86,15 +86,19 @@ class Orders_model extends CI_Model {
 		if (isset($where) && !empty($where)) {
 			if (isset($where['id']) && '' !== $where['id']) {
 				$w['orders.id'] = $where['id'];
+				unset($where['id']);
 			}
 			if (isset($where['pet']) && '' !== $where['pet']) {
 				$w['pets.id'] = $where['pet'];
+				unset($where['pet']);
 			}
 			if (isset($where['buyer']) && '' !== $where['buyer']) {
 				$w['b.id'] = $where['buyer'];
+				unset($where['buyer']);
 			}
 			if (isset($where['publisher']) && '' !== $where['publisher']) {
 				$w['u.id'] = $where['publisher'];
+				unset($where['buyer']);
 			}
 			if (isset($where['adopted'])) {
 				if (1 == $where['adopted']) {
@@ -102,7 +106,9 @@ class Orders_model extends CI_Model {
 				} else if (0 == $where['adopted']) {
 					$w['orders.buyers_id'] = NULL;
 				}
+				unset($where['adopted']);
 			}
+			$w = array_merge($w, $where);
 		}
 		$this->db->where($w);
 
@@ -130,10 +136,12 @@ class Orders_model extends CI_Model {
 			'pets.birthday AS pets_birthday, pets.create_time AS pets_create_time, ' .
 			'u.id AS publisher_id, u.name AS publisher_name, u.description AS publisher_description, ' .
 			'u.image AS publisher_image, u.phone AS publisher_phone, u.country AS publisher_country, ' .
-			'u.user_id AS publisher_user_id, u.address AS publisher_address, u.postcode AS publisher_postcode, ' .
+			'u.city AS publisher_city, u.road AS publisher_road, u.address AS publisher_address, ' .
+			'u.user_id AS publisher_user_id, u.postcode AS publisher_postcode, ' .
 			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description, ' .
 			'b.image AS buyer_image, b.phone AS buyer_phone, b.country AS buyer_country, ' .
-			'b.user_id AS buyer_user_id, b.address AS buyer_address, b.postcode AS buyer_postcode '
+			'b.city AS buyer_city, b.road AS buyer_road, b.address AS buyer_address, ' .
+			'b.user_id AS buyer_user_id, b.postcode AS buyer_postcode '
 		);
 		$this->db->from('orders');
 		$this->db->join('pets', 'pets.id = orders.pets_id', 'left');
@@ -184,8 +192,10 @@ class Orders_model extends CI_Model {
 				'u.image AS users_image, ' .
 				'u.phone AS users_phone, ' .
 				'u.country AS users_country, ' .
-				'u.user_id AS users_user_id, ' .
+				'u.city AS users_city, ' .
+				'u.road AS users_road, ' .
 				'u.address AS users_address, ' .
+				'u.user_id AS users_user_id, ' .
 				'u.postcode AS users_postcode '
 			);
 			$this -> db -> from('orders');
@@ -219,8 +229,10 @@ class Orders_model extends CI_Model {
 				'u.image AS users_image, ' .
 				'u.phone AS users_phone, ' .
 				'u.country AS users_country, ' .
-				'u.user_id AS users_user_id, ' .
+				'u.city AS users_city, ' .
+				'u.road AS users_road, ' .
 				'u.address AS users_address, ' .
+				'u.user_id AS users_user_id, ' .
 				'u.postcode AS users_postcode '
 			);
 			$this -> db -> from('orders');
