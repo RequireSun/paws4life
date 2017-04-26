@@ -9,6 +9,7 @@
    /users/get_detail: 获取用户详情
    /users/get_list  : 获取用户列表
    /users/login     : 登录(校验)
+   /users/logout    : 登出
    /users/register  : 注册(普通用户自行注册)
    /users/add       : 添加新用户(管理员添加普通用户和商户用户)
    /users/modify    : 修改账户信息

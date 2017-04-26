@@ -1,26 +1,8 @@
--- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
---
--- Host: 127.0.0.1
--- Generation Time: 2017-03-23 20:48:48
--- 服务器版本： 10.1.10-MariaDB
--- PHP Version: 5.6.19
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Database: `paws4life`
 --
-CREATE DATABASE IF NOT EXISTS `paws4life` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `paws4life`;
+-- CREATE DATABASE IF NOT EXISTS `paws4life` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE `paws4life`;
 
 -- --------------------------------------------------------
 
@@ -43,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   KEY `orders_pets_users` (`pets_id`,`users_id`),
   KEY `orders_users` (`users_id`),
   KEY `orders_pets_buyers` (`buyers_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 表的关联 `orders`:
@@ -64,28 +46,33 @@ INSERT INTO `orders` (`id`, `pets_id`, `users_id`, `buyers_id`, `create_time`, `
 (2, 2, 1, NULL, '2017-03-14 00:00:00', '0000-00-00 00:00:00', 0),
 (3, 3, 1, 36, '2017-03-16 00:00:00', '0000-00-00 00:00:00', 0),
 (4, 4, 2, 3, '2017-03-16 00:00:00', '0000-00-00 00:00:00', 0),
-(5, 9, 36, 3, '2017-03-23 20:05:41', '0000-00-00 00:00:00', 0);
+(5, 9, 36, 3, '2017-03-23 20:05:41', '0000-00-00 00:00:00', 0),
+(6, 10, 1, NULL, '2017-04-25 19:25:06', '0000-00-00 00:00:00', 0);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `pets`
 --
--- 创建时间： 2017-03-23 18:15:00
+-- 创建时间： 2017-04-24 16:50:11
 --
 
 DROP TABLE IF EXISTS `pets`;
 CREATE TABLE IF NOT EXISTS `pets` (
   `id` int(32) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(24) COLLATE utf8mb4_unicode_ci DEFAULT '',
+  `title` varchar(72) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `description` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `image` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `type` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `gender` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `birthday` date DEFAULT NULL,
   `create_time` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `pets_name` (`name`) USING BTREE,
   KEY `pets_description` (`description`(72)) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- 表的关联 `pets`:
@@ -95,23 +82,24 @@ CREATE TABLE IF NOT EXISTS `pets` (
 -- 转存表中的数据 `pets`
 --
 
-INSERT INTO `pets` (`id`, `name`, `description`, `image`, `create_time`, `deleted`) VALUES
-(1, 'testname', 'testdes', 'imgsa', '0000-00-00 00:00:00', 0),
-(2, 'test1', '阿斯发达分萨芬', '支持vzcxzz', '0000-00-00 00:00:00', 0),
-(3, 'test1', '阿斯发达分萨芬', '支持vzcxzz', '0000-00-00 00:00:00', 0),
-(4, 'test1', '阿斯发达分萨芬', '支持vzcxzz', '0000-00-00 00:00:00', 0),
-(5, '666', '', '', '2017-03-23 19:51:46', 0),
-(6, '888', '', '', '2017-03-23 19:53:42', 0),
-(7, '888', '', '', '2017-03-23 20:04:39', 0),
-(8, '888', '', '', '2017-03-23 20:05:05', 0),
-(9, '888', '', '', '2017-03-23 20:05:41', 0);
+INSERT INTO `pets` (`id`, `name`, `title`, `description`, `image`, `type`, `gender`, `birthday`, `create_time`, `deleted`) VALUES
+(1, 'testname', '', 'testdes', 'imgsa', '', '', NULL, '0000-00-00 00:00:00', 0),
+(2, 'test1', '', '阿斯发达分萨芬', '支持vzcxzz', '', '', NULL, '0000-00-00 00:00:00', 0),
+(3, 'test1', '', '阿斯发达分萨芬', '支持vzcxzz', '', '', NULL, '0000-00-00 00:00:00', 0),
+(4, 'test1', '', '阿斯发达分萨芬', '支持vzcxzz', '', '', NULL, '0000-00-00 00:00:00', 0),
+(5, '666', '', '', '', '', '', NULL, '2017-03-23 19:51:46', 0),
+(6, '888', '', '', '', '', '', NULL, '2017-03-23 19:53:42', 0),
+(7, '888', '', '', '', '', '', NULL, '2017-03-23 20:04:39', 0),
+(8, '888', '', '', '', '', '', NULL, '2017-03-23 20:05:05', 0),
+(9, '888', '', '', '', '', '', NULL, '2017-03-23 20:05:41', 0),
+(10, '666', '', '777', '', '', '', '0000-00-00', '2017-04-25 19:25:06', 0);
 
 -- --------------------------------------------------------
 
 --
 -- 表的结构 `users`
 --
--- 创建时间： 2017-03-20 18:48:10
+-- 创建时间： 2017-04-25 15:14:18
 --
 
 DROP TABLE IF EXISTS `users`;
@@ -119,6 +107,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(32) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `description` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `image` varchar(500) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `phone` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `country` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `city` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `road` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `address` varchar(72) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `user_id` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `postcode` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `account` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `password` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `power` int(8) NOT NULL DEFAULT '1',
@@ -138,20 +134,20 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- 转存表中的数据 `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `description`, `account`, `password`, `power`, `deleted`) VALUES
-(1, 'test', 'tttttttt', 'test', 'zxcv', 1, 0),
-(2, 'asdf', 'zcvxzcvxzvc', 'asdf', '666', 1, 0),
-(3, '8888', '阿凡达说法是否', '666666', '666666', 1, 0),
-(4, '66666', '', 'aaa', 'bbbddd', 1, 0),
-(32, '6666666', '', 'a', 'bbb', 1, 0),
-(33, '', '', 'aa', 'bbb', 1, 0),
-(36, '', '', 'abaa', 'bbb', 1, 0),
-(39, '', '6666666', 'aababbaaaa', 'bbb', 1, 0),
-(40, '', '', 'abbabbaaaa', 'bbb', 1, 0),
-(42, '', '666677', 'abbbbb', 'bbb', 1, 0),
-(46, '', '', 'abbbbbd', 'bbb', 1, 0),
-(47, '', '', 'dda', 'bbb', 1, 0),
-(48, '', '', 'dafdsa', 'bbbddd231313', 1, 1);
+INSERT INTO `users` (`id`, `name`, `description`, `image`, `phone`, `country`, `city`, `road`, `address`, `user_id`, `postcode`, `account`, `password`, `power`, `deleted`) VALUES
+(1, 'test', 'tttttttt', '', '', '', '', '', '', '', '', 'test', 'zxcv', 1, 0),
+(2, 'asdf', 'zcvxzcvxzvc', '', '', '', '', '', '', '', '', 'asdf', '666', 1, 0),
+(3, '8888', '阿凡达说法是否', '', '', '', '', '', '', '', '', '666666', '666666', 1, 0),
+(4, '66666', '', '', '', '', '', '', '', '', '', 'aaa', 'bbbddd', 1, 0),
+(32, '6666666', '', '', '', '', '', '', '', '', '', 'a', 'bbb', 1, 0),
+(33, '', '', '', '', '', '', '', '', '', '', 'aa', 'bbb', 1, 0),
+(36, '', '', '', '', '', '', '', '', '', '', 'abaa', 'bbb', 1, 0),
+(39, '', '6666666', '', '', '', '', '', '', '', '', 'aababbaaaa', 'bbb', 1, 0),
+(40, '', '', '', '', '', '', '', '', '', '', 'abbabbaaaa', 'bbb', 1, 0),
+(42, '', '666677', '', '', '', '', '', '', '', '', 'abbbbb', 'bbb', 1, 0),
+(46, '', '', '', '', '', '', '', '', '', '', 'abbbbbd', 'bbb', 1, 0),
+(47, '', '', '', '', '', '', '', '', '', '', 'dda', 'bbb', 1, 0),
+(48, '', '', '', '', '', '', '', '', '', '', 'dafdsa', 'bbbddd231313', 1, 1);
 
 --
 -- 限制导出的表
