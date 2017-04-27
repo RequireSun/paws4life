@@ -1,8 +1,8 @@
 --
 -- Database: `paws4life`
 --
--- CREATE DATABASE IF NOT EXISTS `paws4life` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
--- USE `paws4life`;
+CREATE DATABASE IF NOT EXISTS `paws4life` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `paws4life`;
 
 -- --------------------------------------------------------
 
@@ -99,7 +99,7 @@ INSERT INTO `pets` (`id`, `name`, `title`, `description`, `image`, `type`, `gend
 --
 -- 表的结构 `users`
 --
--- 创建时间： 2017-04-25 15:14:18
+-- 创建时间： 2017-04-27 14:41:49
 --
 
 DROP TABLE IF EXISTS `users`;
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `description` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `image` varchar(500) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `phone` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
-  `country` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `county` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `city` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `road` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `address` varchar(72) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- 转存表中的数据 `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `description`, `image`, `phone`, `country`, `city`, `road`, `address`, `user_id`, `postcode`, `account`, `password`, `power`, `deleted`) VALUES
+INSERT INTO `users` (`id`, `name`, `description`, `image`, `phone`, `county`, `city`, `road`, `address`, `user_id`, `postcode`, `account`, `password`, `power`, `deleted`) VALUES
 (1, 'test', 'tttttttt', '', '', '', '', '', '', '', '', 'test', 'zxcv', 1, 0),
 (2, 'asdf', 'zcvxzcvxzvc', '', '', '', '', '', '', '', '', 'asdf', '666', 1, 0),
 (3, '8888', '阿凡达说法是否', '', '', '', '', '', '', '', '', '666666', '666666', 1, 0),

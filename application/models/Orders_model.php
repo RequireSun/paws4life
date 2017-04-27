@@ -135,11 +135,11 @@ class Orders_model extends CI_Model {
 			'pets.image AS pets_image, pets.type AS pets_type, pets.gender AS pets_gender, ' .
 			'pets.birthday AS pets_birthday, pets.create_time AS pets_create_time, ' .
 			'u.id AS publisher_id, u.name AS publisher_name, u.description AS publisher_description, ' .
-			'u.image AS publisher_image, u.phone AS publisher_phone, u.country AS publisher_country, ' .
+			'u.image AS publisher_image, u.phone AS publisher_phone, u.county AS publisher_county, ' .
 			'u.city AS publisher_city, u.road AS publisher_road, u.address AS publisher_address, ' .
 			'u.user_id AS publisher_user_id, u.postcode AS publisher_postcode, ' .
 			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description, ' .
-			'b.image AS buyer_image, b.phone AS buyer_phone, b.country AS buyer_country, ' .
+			'b.image AS buyer_image, b.phone AS buyer_phone, b.county AS buyer_county, ' .
 			'b.city AS buyer_city, b.road AS buyer_road, b.address AS buyer_address, ' .
 			'b.user_id AS buyer_user_id, b.postcode AS buyer_postcode '
 		);
@@ -191,7 +191,7 @@ class Orders_model extends CI_Model {
 				'users.description AS users_description, ' .
 				'u.image AS users_image, ' .
 				'u.phone AS users_phone, ' .
-				'u.country AS users_country, ' .
+				'u.county AS users_county, ' .
 				'u.city AS users_city, ' .
 				'u.road AS users_road, ' .
 				'u.address AS users_address, ' .
@@ -228,7 +228,7 @@ class Orders_model extends CI_Model {
 				'users.description AS users_description, ' .
 				'u.image AS users_image, ' .
 				'u.phone AS users_phone, ' .
-				'u.country AS users_country, ' .
+				'u.county AS users_county, ' .
 				'u.city AS users_city, ' .
 				'u.road AS users_road, ' .
 				'u.address AS users_address, ' .

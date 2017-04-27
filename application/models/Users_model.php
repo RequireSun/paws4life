@@ -77,7 +77,7 @@ class Users_model extends CI_Model {
 
 	public function insert (
 		$account, $password, $name = "", $description = "",
-		$image = "", $phone = "", $country = "", $city = "",
+		$image = "", $phone = "", $county = "", $city = "",
 		$road = "", $address = "", $user_id = "", $postcode = "", $power = 1
 	) {
 		if (isset($account) && isset($password) && '' !== $account && '' !== $password) {
@@ -88,7 +88,7 @@ class Users_model extends CI_Model {
 				"description" => $description,
 				"image" => $image,
 				"phone" => $phone,
-				"country" => $country,
+				"county" => $county,
 				"city" => $city,
 				"road" => $road,
 				"address" => $address,
@@ -117,7 +117,7 @@ class Users_model extends CI_Model {
 			$data = array();
 			$values = array(
 				"password", "name", "description", "image",
-				"phone", "country", "city", "road", "address",
+				"phone", "county", "city", "road", "address",
 				"user_id", "postcode", "power"
 			);
 

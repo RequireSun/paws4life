@@ -104,7 +104,7 @@ class Users extends MY_Controller {
 		$search     = $this->get_post_xss('search');
 		$where      = $this->get_post_xss('where') ?: '';
 		$where      = json_decode($where, true);
-		$where      = array_merge($where, array('id' => $id, 'power' => $power));
+		$where      = array_merge($where ?: array(), array('id' => $id, 'power' => $power));
 		
 		$data = $this->users_model->get_list(
 			array('pageNumber' => $pageNumber, 'pageSize' => $pageSize),
@@ -128,6 +128,7 @@ class Users extends MY_Controller {
 			$this -> success($data);
 		}
 	}
+
 	public function logout () {
 		$this -> delete_cookie("uid");
 		$this -> success(array());
@@ -240,7 +241,7 @@ class Users extends MY_Controller {
 		$description = $this -> get_post_xss("description");
 		$image       = $this -> get_post_xss("image");
 		$phone       = $this -> get_post_xss("phone");
-		$country     = $this -> get_post_xss("country");
+		$county      = $this -> get_post_xss("county");
 		$city        = $this -> get_post_xss("city");
 		$road        = $this -> get_post_xss("road");
 		$address     = $this -> get_post_xss("address");
@@ -265,7 +266,7 @@ class Users extends MY_Controller {
 		$data['description'] = $description;
 		$data['image'] = $image;
 		$data['phone'] = $phone;
-		$data['country'] = $country;
+		$data['county'] = $county;
 		$data['city'] = $city;
 		$data['road'] = $road;
 		$data['address'] = $address;

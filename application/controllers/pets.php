@@ -47,7 +47,7 @@ class pets extends MY_Controller {
 
 		$where      = htmlspecialchars_decode(urldecode($this->get_post_xss('where') ?: ''));
 		$where      = json_decode($where, true);
-		$where      = array_merge($where, array('id' => $id, 'buyer' => $buyer, 'publisher' => $publisher, 'adopted' => $adopted));
+		$where      = array_merge($where ?: array(), array('id' => $id, 'buyer' => $buyer, 'publisher' => $publisher, 'adopted' => $adopted));
 
 		$data = $this->pets_model->get_list(
 			array('pageNumber' => $pageNumber, 'pageSize' => $pageSize),

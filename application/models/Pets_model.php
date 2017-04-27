@@ -77,10 +77,10 @@ class Pets_model extends CI_Model {
 			'pets.birthday AS birthday, pets.create_time AS create_time, ' .
 			'orders.id AS orders_id, orders.create_time AS orders_create_time, ' .
 			'u.id AS publisher_id, u.name AS publisher_name, u.description AS publisher_description, ' .
-			'u.image AS publisher_image, u.phone AS publisher_phone, u.country AS publisher_country, ' .
+			'u.image AS publisher_image, u.phone AS publisher_phone, u.county AS publisher_county, ' .
 			'u.user_id AS publisher_user_id, u.address AS publisher_address, u.postcode AS publisher_postcode, ' .
 			'b.id AS buyer_id, b.name AS buyer_name, b.description AS buyer_description, ' .
-			'b.image AS buyer_image, b.phone AS buyer_phone, b.country AS buyer_country, ' .
+			'b.image AS buyer_image, b.phone AS buyer_phone, b.county AS buyer_county, ' .
 			'b.user_id AS buyer_user_id, b.address AS buyer_address, b.postcode AS buyer_postcode '
 
 		);
