@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="frm">
+	<form name="uploadFrom" id="uploadFrom" action="/index.php/upload/submit" method="post"
+		  target="tarframe" enctype="multipart/form-data">
+		<input type="file" id="upload_file" name="upfile">
+	</form>
+	<iframe src=""  width="0" height="0" style="display:none;" name="tarframe"></iframe>
+</div>
+<div id="msg"></div>
+<script src="js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#upload_file").change(function(){
+			$("#uploadFrom").submit();
+		});
+	});
+	function stopSend(str){
+		var im="<img src='/static/upload/"+str+"'>";
+		$("#msg").append(im);
+	}
+</script>
+</body>
+</html>

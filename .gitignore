@@ -1,6 +1,7 @@
 .DS_Store
 
 application/config/mail.php
+static/upload/*
 
 application/cache/*
 !application/cache/index.html
