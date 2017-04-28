@@ -16,7 +16,7 @@ class Users_model extends CI_Model {
 		if (isset($id) && '' !== $id) {
 			$this -> db -> select(
 				'id, name, description, image, ' .
-				'phone, country, city, road, ' .
+				'phone, county, city, road, ' .
 				'address, user_id, postcode, power'
 			);
 			$query = $this -> db -> get_where('users', array('id' => $id, 'deleted' => 0), 1);
@@ -45,7 +45,7 @@ class Users_model extends CI_Model {
 
 		$this->db->select(
 			'id, name, description, image, ' .
-			'phone, country, city, road, ' .
+			'phone, county, city, road, ' .
 			'address, user_id, postcode, power'
 		);
 
