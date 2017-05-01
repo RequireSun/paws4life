@@ -119,6 +119,8 @@ class Users extends MY_Controller {
 		$account  = $this -> get_post_xss("account");
 		$password = $this -> get_post_xss("password");
 
+		$password = md5($password);
+
 		$data = $this -> users_model -> check_account_password($account, $password);
 
 		if (empty($data)) {
@@ -130,7 +132,7 @@ class Users extends MY_Controller {
 	}
 
 	public function logout () {
-		$this -> delete_cookie("uid");
+		delete_cookie("uid");
 		$this -> success(array());
 	}
 	/**
@@ -148,6 +150,8 @@ class Users extends MY_Controller {
 
 		$name        = $this -> get_post_xss("name");
 		$description = $this -> get_post_xss("description");
+
+		$password = md5($password);
 		
 		$flag = $this -> users_model -> insert($account, $password, $name, $description);
 
@@ -195,6 +199,8 @@ class Users extends MY_Controller {
 		} else if (0 >= $power) {
 			$power = 1;
 		}
+
+		$password = md5($password);
 
 		$flag = $this -> users_model -> insert(
 			$account, $password, $name, $description,
@@ -272,6 +278,8 @@ class Users extends MY_Controller {
 		$data['address'] = $address;
 		$data['user_id'] = $user_id;
 		$data['postcode'] = $postcode;
+
+		$data['password'] = md5($data['password']);
 
 		$flag = $this -> users_model -> update($id, $data);
 
