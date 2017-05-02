@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_id` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `postcode` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `account` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `password` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `password` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `power` int(8) NOT NULL DEFAULT '1',
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE,

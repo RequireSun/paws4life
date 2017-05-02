@@ -69,6 +69,7 @@ class Users_model extends CI_Model {
 		if (isset($account) && isset($password) && '' !== $account && '' !== $password) {
 			$this -> db -> select('id');
 			$query = $this -> db -> get_where('users', array('account' => $account, 'password' => $password, 'deleted' => 0), 1);
+			log_message('DEBUG', $this->db->last_query());
 			return $query -> row_array();
 		} else {
 			return array();

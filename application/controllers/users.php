@@ -124,7 +124,7 @@ class Users extends MY_Controller {
 		$data = $this -> users_model -> check_account_password($account, $password);
 
 		if (empty($data)) {
-			$this -> error($data, -1);
+			$this -> error(array($account, $password), -1);
 		} else {
 			set_cookie("uid", $data['id'], 7200);
 			$this -> success($data);
